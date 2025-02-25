@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user";
+import { CreateUserDto } from "./dto/create-user.dto";
 import { UserRepository } from "./user.repository";
 
 @Injectable()
@@ -15,6 +15,6 @@ export class UserService {
   }
 
   delete(userId: string) {
-    return "TO BE IMPLEMENTED"
+    return this.userRepository.delete(userId)
   }
 }

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConsentModule } from "./consent/consent.module";
+import { PreferenceModule } from "./consent/preference.module";
 
 @Module({
-  imports: [ConsentModule],
+  imports: [PreferenceModule],
 })
 export class AppModule {}

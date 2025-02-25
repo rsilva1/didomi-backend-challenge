@@ -9,8 +9,8 @@ import {
   PostgresDialect,
   FileMigrationProvider,
 } from 'kysely'
-import { Database } from './types'
 import { ConfigService } from "@nestjs/config"
+import { Database } from "./consent/database/database"
 
 const configService = new ConfigService();
 

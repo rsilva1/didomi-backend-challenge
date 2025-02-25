@@ -1,11 +1,11 @@
-import { Kysely } from "kysely";
+import { Kysely, sql } from "kysely";
 
 const TABLE_NAME = 'consent_events';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable(TABLE_NAME)
-    .addColumn('id', 'uuid', (col) => col.primaryKey())
+    .addColumn('id', 'uuid', (col) => col.defaultTo(sql`gen_random_uuid()`).primaryKey())
     .addColumn('user_id', 'uuid', (col) => col.notNull())
     .addColumn('consent_type', 'varchar', (col) => col.notNull())
     .addColumn('allow', 'boolean', (col) => col.notNull())

@@ -12,7 +12,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
   await db.schema
     .createTable(TABLE_NAME)
-    .addColumn('id', 'uuid', (col) => col.primaryKey())
+    .addColumn('id', 'uuid', (col) => col.defaultTo(sql`gen_random_uuid()`).primaryKey())
     .addColumn('user_id', 'uuid', (col) =>
       col.references('users.id').onDelete('cascade')
     )

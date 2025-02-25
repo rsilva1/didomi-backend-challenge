@@ -5,10 +5,12 @@ import { configZodSchema } from "../config.schema";
 import { APP_PIPE } from "@nestjs/core";
 import { ZodValidationPipe } from "nestjs-zod";
 import { UserModule } from "./users/user.module";
+import { ConsentModule } from "./consents/consent.module";
 
 @Module({
   imports: [
     UserModule,
+    ConsentModule,
     DatabaseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -27,4 +29,4 @@ import { UserModule } from "./users/user.module";
     }
   ]
 })
-export class ConsentModule {}
+export class PreferenceModule {}
