@@ -1,32 +1,31 @@
-import { Module } from "@nestjs/common";
-import { DatabaseModule } from "./database/database.module";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { configZodSchema } from "../config.schema";
-import { APP_PIPE } from "@nestjs/core";
-import { ZodValidationPipe } from "nestjs-zod";
-import { UserModule } from "./users/user.module";
-import { ConsentModule } from "./consents/consent.module";
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { configZodSchema } from '../config.schema';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { ZodValidationPipe } from 'nestjs-zod';
+import { UserModule } from './users/user.module';
+import { ConsentModule } from './consents/consent.module';
+import { InternalExceptionFilter } from './internal-exception.filter';
+import { DatabaseModule } from '../database/database.module';
 
 @Module({
   imports: [
     UserModule,
     ConsentModule,
-    DatabaseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        connectionUrl: configService.get('CONSENT_DATABASE_URL')!,
-      })
-    }),
+    DatabaseModule.forRootAsync({ dbName: 'consent' }),
     ConfigModule.forRoot({
-      validate: configZodSchema.parse,
+      validate: (config) => configZodSchema.parse(config),
     }),
   ],
   providers: [
     {
       provide: APP_PIPE,
       useClass: ZodValidationPipe,
-    }
-  ]
+    },
+    {
+      provide: APP_FILTER,
+      useClass: InternalExceptionFilter,
+    },
+  ],
 })
 export class PreferenceModule {}

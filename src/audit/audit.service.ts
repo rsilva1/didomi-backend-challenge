@@ -1,8 +1,12 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common';
+import { EventsRepository } from './events.repository';
+import { UpdateConsentsDto } from '../consent/consents/dto/update-consents.dto';
 
 @Injectable()
 export class AuditService {
-   async createMany(params: any) {
-    console.log("AuditService createMany to be implemented")
+  constructor(private readonly eventsRepository: EventsRepository) {}
+
+  async createMany(params: UpdateConsentsDto) {
+    return this.eventsRepository.createMany(params);
   }
 }

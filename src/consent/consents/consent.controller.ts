@@ -1,8 +1,8 @@
-import { Body, Controller, Post } from "@nestjs/common";
-import { ConsentService } from "./consent.service";
-import { UpdateConsentsDto } from "./dto/update-consents.dto";
+import { Body, Controller, Post } from '@nestjs/common';
+import { ConsentService } from './consent.service';
+import { UpdateConsentsDto } from './dto/update-consents.dto';
 
-@Controller("/events")
+@Controller('/events')
 export class ConsentController {
   constructor(private readonly consentService: ConsentService) {}
 

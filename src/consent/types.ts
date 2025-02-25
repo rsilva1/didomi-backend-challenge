@@ -1,6 +1,11 @@
-export const CONSENT_TYPES = ["email_notifications", "sms_notifications"] as const;
+import { z } from 'zod';
 
-export type ConsentTypes = typeof CONSENT_TYPES[number];
+export const CONSENT_TYPES = [
+  'email_notifications',
+  'sms_notifications',
+] as const;
+
+export type ConsentTypes = (typeof CONSENT_TYPES)[number];
 
 export type Consent = {
   id: ConsentTypes;
@@ -11,4 +16,6 @@ export type UserConsent = {
   id: string;
   email: string;
   consents: Consent[];
-}
+};
+
+export const uuidSchema = z.string().uuid({ message: 'Invalid uuid' });

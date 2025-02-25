@@ -1,9 +1,9 @@
-import { Injectable } from "@nestjs/common";
-import { UpdateConsentsDto } from "./dto/update-consents.dto";
-import { UserRepository } from "../users/user.repository";
-import { ConsentRepository } from "./consent.repository";
-import { UserConsent } from "../types";
-import { AuditService } from "../../audit/audit.service";
+import { Injectable } from '@nestjs/common';
+import { UpdateConsentsDto } from './dto/update-consents.dto';
+import { UserRepository } from '../users/user.repository';
+import { ConsentRepository } from './consent.repository';
+import { UserConsent } from '../types';
+import { AuditService } from '../../audit/audit.service';
 
 @Injectable()
 export class ConsentService {
@@ -19,15 +19,15 @@ export class ConsentService {
     const userId = params.user.id;
     const user = await this.userRepository.findById(userId);
 
-    const [
-      preferencesResult,
-      auditResult,
-    ] = await Promise.allSettled([
+    const [preferencesResult, auditResult] = await Promise.allSettled([
       this.consentRepository.upsertMany(user, params),
       this.auditService.createMany(params),
-    ])
+    ]);
 
-    if (preferencesResult.status == "rejected" || auditResult.status == "rejected") {
+    if (
+      preferencesResult.status == 'rejected' ||
+      auditResult.status == 'rejected'
+    ) {
       // rollback somehow
     }
 

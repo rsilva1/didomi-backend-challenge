@@ -9,4 +9,3 @@ export function invariant(condition: boolean, errClass: any, opts?: any): void {
     }
   }
 }
-
