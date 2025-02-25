@@ -22,7 +22,8 @@ async function createMigrationFile(dbName: DbName, name: string) {
     getMigrationFolder(dbName),
     `${createdAt()}-${name}.ts`,
   );
-  fs.writeFile(filepath, '', { flag: 'w' })
+  return fs
+    .writeFile(filepath, '', { flag: 'w' })
     .then(() => console.log(`Succesfully created file ${filepath}`))
     .catch((err) => console.log('Error: ', err));
 }

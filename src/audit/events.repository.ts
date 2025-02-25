@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Database } from './database/database';
 import { UpdateConsentsDto } from '../consent/consents/dto/update-consents.dto';
-import { NewEvents } from "./events/events-table";
+import { NewEvents } from './events/events-table';
 
 @Injectable()
 export class EventsRepository {
@@ -16,8 +16,8 @@ export class EventsRepository {
       created_at: now,
     }));
     await this.database
-      .insertInto("consent_events")
+      .insertInto('consent_events')
       .values(newEvents)
-      .execute()
+      .execute();
   }
 }

@@ -53,6 +53,6 @@ export class DatabaseModule {
     } else if (dbName == 'audit') {
       return AUDIT_DATABASE;
     }
-    throw new Error(`No token for ${dbName}`);
+    throw new Error('No token for given dbName');
   }
 }
