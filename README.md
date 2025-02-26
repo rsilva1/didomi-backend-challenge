@@ -1,6 +1,6 @@
 ## Description
 
-Preference Center
+Preference Center Challenge
 
 ## Project setup
 
@@ -31,6 +31,8 @@ pnpm migrate:audit
 (if needed to change ports in `docker-compose.dev.yml`, edit the `.env` accordingly)
 
 Run the application:
+
+Default port is 3000 but can be overriden with PORT env.
 
 ```bash
 # development

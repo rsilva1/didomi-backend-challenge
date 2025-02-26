@@ -57,6 +57,15 @@ describe('UserController (e2e)', () => {
       )
     })
 
+    it('rejects invalid email', async () => {
+      const httpServer = app.getHttpServer();
+      await request(httpServer)
+        .post('/users')
+        .send({email: 'invalid-email.com'})
+        .expect(400)
+        .then(res => res.body)
+    })
+
     it('rejects repeated email', async () => {
       const httpServer = app.getHttpServer();
       await request(httpServer)
