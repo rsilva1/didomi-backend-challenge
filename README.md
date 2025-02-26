@@ -52,7 +52,7 @@ docker-compose -f docker-compose.test.yml up
 Once the containers are up, apply the migrations:
 
 ```bash
-pnpm test:prepare
+pnpm test:e2e:prepare
 ```
 
 ```bash

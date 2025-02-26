@@ -24,7 +24,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:migrate:consent": "node -r ts-node/register --env-file=.env.test ./src/migrate-to-latest.ts --dbname=consent",
     "test:migrate:audit": "node -r ts-node/register --env-file=.env.test ./src/migrate-to-latest.ts --dbname=audit",
-    "test:prepare": "pnpm test:migrate:consent && pnpm test:migrate:audit",
+    "test:e2e:prepare": "pnpm test:migrate:consent && pnpm test:migrate:audit",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand"
   },
   "dependencies": {
@@ -80,6 +80,13 @@
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
+    ],
+    "coveragePathIgnorePatterns": [
+      ".*.repository.ts",
+      ".*.module.ts",
+      "src/migrations/.*",
+      "src/create-migration.ts",
+      "src/migrate-to-latest.ts"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",

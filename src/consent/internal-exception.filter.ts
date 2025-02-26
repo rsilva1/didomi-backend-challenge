@@ -55,15 +55,14 @@ export class InternalExceptionFilter implements ExceptionFilter {
   }
 
   private getResponseBodyForInternalError(exception: InternalError) {
-    if (exception instanceof UserDeletionError) {
-      return {
-        message: 'Operation failed',
-      };
-    }
-    else {
+    if (exception instanceof UserNotFoundError
+      || exception instanceof EmailAlreadyExistsError) {
       return {
         message: exception.message,
-      };
+      }
     }
+    return {
+      message: 'Operation failed',
+    };
   }
 }
