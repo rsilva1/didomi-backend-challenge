@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserRepository } from './user.repository';
+import { EmailAlreadyExistsError } from "../../utils/errors";
 
 @Injectable()
 export class UserService {
@@ -11,6 +12,9 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
+    if (await this.userRepository.existsEmail(createUserDto.email)) {
+      throw new EmailAlreadyExistsError(createUserDto.email);
+    }
     return this.userRepository.create(createUserDto);
   }
 

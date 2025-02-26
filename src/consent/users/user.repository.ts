@@ -4,11 +4,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { invariant } from '../../utils/utils';
 import { UserDeletionError, UserNotFoundError } from '../../utils/errors';
 import { Consent, UserConsent } from '../types';
+import { CONSENT_DATABASE } from "../../constants";
 
 @Injectable()
 export class UserRepository {
   constructor(
-    @Inject('CONSENT_DATABASE') private readonly database: Database,
+    @Inject(CONSENT_DATABASE) private readonly database: Database,
   ) {}
 
   async findById(userId: string): Promise<UserConsent> {
@@ -37,6 +38,16 @@ export class UserRepository {
       email: rows[0].email,
       consents,
     };
+  }
+
+  async existsEmail(email: string): Promise<boolean> {
+    const result = await this.database
+      .selectFrom('users')
+      .select('email')
+      .where('email', '=', email)
+      .limit(1)
+      .execute();
+    return result.length == 1;
   }
 
   async create(createUserDto: CreateUserDto): Promise<UserConsent> {

@@ -5,6 +5,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import {
+    EmailAlreadyExistsError,
   InternalError,
   UserDeletionError,
   UserNotFoundError,
@@ -47,6 +48,8 @@ export class InternalExceptionFilter implements ExceptionFilter {
       return HttpStatus.INTERNAL_SERVER_ERROR;
     } else if (exception instanceof UserNotFoundError) {
       return HttpStatus.NOT_FOUND;
+    } else if (exception instanceof EmailAlreadyExistsError) {
+      return HttpStatus.BAD_REQUEST;
     }
     return HttpStatus.INTERNAL_SERVER_ERROR;
   }
@@ -56,11 +59,11 @@ export class InternalExceptionFilter implements ExceptionFilter {
       return {
         message: 'Operation failed',
       };
-    } else if (exception instanceof UserNotFoundError) {
+    }
+    else {
       return {
         message: exception.message,
       };
     }
-    return {};
   }
 }

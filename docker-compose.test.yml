@@ -1,27 +1,27 @@
 version: '3.1'
 
 services:
-  db:
+  test_db:
     image: postgres:15.4
     restart: always
-    hostname: db
+    hostname: test_db
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: consent-db
+      POSTGRES_DB: test-consent-db
     ports:
-      - 5432:5432
-  audit_db:
+      - 5434:5432
+  test_audit_db:
     image: postgres:15.4
     restart: always
-    hostname: audit_db
+    hostname: test_audit_db
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: audit-db
+      POSTGRES_DB: test-audit-db
     ports:
-      - 5433:5432
+      - 5435:5432
 
 

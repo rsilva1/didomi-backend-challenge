@@ -15,3 +15,9 @@ export class UserNotFoundError extends InternalError {
     super(`User ${userId} not found`);
   }
 }
+
+export class EmailAlreadyExistsError extends InternalError {
+  constructor(email: string) {
+    super(`Email ${email} already exists`);
+  }
+}

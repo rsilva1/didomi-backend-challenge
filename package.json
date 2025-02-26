@@ -22,6 +22,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:migrate:consent": "node -r ts-node/register --env-file=.env.test ./src/migrate-to-latest.ts --dbname=consent",
+    "test:migrate:audit": "node -r ts-node/register --env-file=.env.test ./src/migrate-to-latest.ts --dbname=audit",
+    "test:prepare": "pnpm test:migrate:consent && pnpm test:migrate:audit",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
@@ -41,7 +44,7 @@
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
-    "@nestjs/testing": "^11.0.1",
+    "@nestjs/testing": "^11.0.10",
     "@swc/cli": "^0.6.0",
     "@swc/core": "^1.10.7",
     "@types/express": "^5.0.0",

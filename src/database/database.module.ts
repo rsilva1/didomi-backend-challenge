@@ -4,11 +4,9 @@ import { Pool } from 'pg';
 import { Database as ConsentDatabase } from '../consent/database/database';
 import { Database as AuditDatabase } from '../audit/database/database';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AUDIT_DATABASE, CONSENT_DATABASE } from "../constants";
 
 type DbName = 'consent' | 'audit';
-
-export const CONSENT_DATABASE = 'CONSENT_DATABASE';
-export const AUDIT_DATABASE = 'AUDIT_DATABASE';
 
 export class DatabaseModule {
   static forRootAsync(options: { dbName: DbName }): DynamicModule {

@@ -3,11 +3,12 @@ import { Database } from '../database/database';
 import { UpdateConsentsDto } from './dto/update-consents.dto';
 import { UserConsent } from '../types';
 import { ConsentsUpdate, NewConsent } from './consents-table';
+import { CONSENT_DATABASE } from "../../constants";
 
 @Injectable()
 export class ConsentRepository {
   constructor(
-    @Inject('CONSENT_DATABASE') private readonly database: Database,
+    @Inject(CONSENT_DATABASE) private readonly database: Database,
   ) {}
 
   async upsertMany(user: UserConsent, params: UpdateConsentsDto) {
