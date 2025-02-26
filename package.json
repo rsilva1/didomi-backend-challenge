@@ -25,7 +25,7 @@
     "test:migrate:consent": "node -r ts-node/register --env-file=.env.test ./src/migrate-to-latest.ts --dbname=consent",
     "test:migrate:audit": "node -r ts-node/register --env-file=.env.test ./src/migrate-to-latest.ts --dbname=audit",
     "test:prepare": "pnpm test:migrate:consent && pnpm test:migrate:audit",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json --runInBand"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -82,6 +82,7 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "maxWorkers": 1
   }
 }
