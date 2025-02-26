@@ -29,7 +29,7 @@ export class UserController {
   }
 
   @Delete(':userId')
-  @HttpCode(200)
+  @HttpCode(204)
   deleteUser(
     @Param('userId', new ZodValidationPipe(uuidSchema)) userId: string,
   ) {

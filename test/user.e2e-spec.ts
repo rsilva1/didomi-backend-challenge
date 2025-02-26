@@ -7,6 +7,7 @@ import { ConfigService } from "@nestjs/config";
 import { AUDIT_DATABASE, CONSENT_DATABASE } from "../src/constants";
 import { Database as ConsentDatabase } from "../src/consent/database/database";
 import { Database as AuditDatabase } from "../src/audit/database/database";
+import { createUser } from "./test-utils";
 
 describe('UserController (e2e)', () => {
   let app: INestApplication<App>;
@@ -76,12 +77,7 @@ describe('UserController (e2e)', () => {
     let userId: string;
 
     beforeEach(async () => {
-      const result = await consentDb
-        .insertInto('users')
-        .values({ email: "someone@email.com" })
-        .returning(['id'])
-        .executeTakeFirst();
-      userId = result!.id;
+      userId = await createUser(consentDb, "someone@email.com")
       await consentDb
         .insertInto('consents')
         .values([
@@ -124,16 +120,70 @@ describe('UserController (e2e)', () => {
   })
 
   describe('/users/:userId (DELETE)', () => {
+    let jimId: string;
+    let tomId: string;
     beforeEach(async () => {
+      jimId = await createUser(consentDb, "jim@email.com")
+      tomId = await createUser(consentDb, "tom@email.com")
+      await consentDb
+        .insertInto('consents')
+        .values([
+          { user_id: jimId, consent_type: 'sms_notifications', allow: true },
+          { user_id: jimId, consent_type: 'email_notifications', allow: false },
+          { user_id: tomId, consent_type: 'email_notifications', allow: true },
+        ]).execute()
+      const now = new Date().toISOString();
+      await auditDb
+        .insertInto('consent_events')
+        .values([
+          { user_id: jimId, consent_type: 'sms_notifications', allow: true, created_at: now },
+          { user_id: jimId, consent_type: 'email_notifications', allow: false, created_at: now },
+          { user_id: tomId, consent_type: 'email_notifications', allow: true, created_at: now },
+        ]).execute()
     })
 
-    it('deletes user and consents', async () => {})
-    it('keep audit entries', async () => {})
+    it('deletes user and consents', async () => {
+      const httpServer = app.getHttpServer();
+      await request(httpServer)
+        .delete(`/users/${jimId}`)
+        .expect(204)
+      await request(httpServer)
+        .get(`/users/${jimId}`)
+        .expect(404)
+      const jimConsents = await consentDb
+        .selectFrom('consents')
+        .where('user_id', '=', jimId)
+        .execute();
+      expect(jimConsents).toHaveLength(0);
+    })
+
+    it('keep audit entries', async () => {
+      const httpServer = app.getHttpServer();
+      await request(httpServer)
+        .delete(`/users/${jimId}`)
+        .expect(204)
+      const jimAuditConsents = await auditDb
+        .selectFrom('consent_events')
+        .where('user_id', '=', jimId)
+        .execute();
+      expect(jimAuditConsents).toHaveLength(2);
+    })
 
     it('rejects invalid id', async () => {
+      const httpServer = app.getHttpServer();
+      await request(httpServer)
+        .delete(`/users/jim`)
+        .expect(400)
     })
 
     it('rejects inexistent id', async () => {
+      const httpServer = app.getHttpServer();
+      await request(httpServer)
+        .delete(`/users/${jimId}`)
+        .expect(204)
+      await request(httpServer)
+        .post(`/users/${jimId}`)
+        .expect(404)
     })
   })
 })
