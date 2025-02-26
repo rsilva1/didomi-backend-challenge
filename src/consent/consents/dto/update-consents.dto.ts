@@ -12,16 +12,13 @@ const UpdateConsentsSchema = z.object({
       enabled: z.boolean(),
     })
     .array()
-    .nonempty(),
+    .nonempty()
+    .refine((data) => {
+      const uniqueIds = new Set(data.map((consent) => consent.id));
+      return uniqueIds.size == data.length;
+    }, {
+      message: "consent id must be unique"
+    }),
 });
 
-// tech debt
-// deal with repeated consents.id in the array like:
-/* "consents": [
- * {"id": "email_notifications","enabled": true}
- * {"id": "email_notifications","enabled": false}
- * {"id": "email_notifications","enabled": true}
- * {"id": "email_notifications","enabled": false}
- * ]
- */
 export class UpdateConsentsDto extends createZodDto(UpdateConsentsSchema) {}
